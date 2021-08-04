@@ -213,11 +213,11 @@ elif args[0] == 'genwallet':
     checkwrite(options.wallet, lambda: json.dumps(newwal))
     if options.backup:
         checkwrite(options.backup, lambda: json.dumps(mkbackup(newwal, pw)))
-    print "Your intermediate Bitcoin address is:", newwal['btcaddr']
+    print ("Your intermediate Bitcoin address is:", newwal['btcaddr'])
 # Backup existing wallet
 elif args[0] == 'mkbackup':
     if not w:
-        print "Must specify wallet with -w"
+        print ("Must specify wallet with -w")
     if not opts['backup']:
         opts['backup'] = 'ethwallet.bkp.json'
     pw = password()
@@ -225,38 +225,38 @@ elif args[0] == 'mkbackup':
 # Get wallet Bitcoin address
 elif args[0] == 'getbtcaddress':
     if not w:
-        print "Must specify wallet with -w"
-    print w["btcaddr"]
+        print ("Must specify wallet with -w")
+    print (w["btcaddr"])
 # Get wallet Ethereum address
 elif args[0] == 'getethaddress':
     if not w:
-        print "Must specify wallet with -w"
-    print w["ethaddr"]
+        print ("Must specify wallet with -w")
+    print (w["ethaddr"])
 # Get wallet Bitcoin privkey
 elif args[0] == 'getbtcprivkey':
     pw = ask_for_password()
-    print encode_privkey(sha3(getseed(w['encseed'], pw,
-                         w['ethaddr'])+'\x01'), 'wif')
+    print (encode_privkey(sha3(getseed(w['encseed'], pw,
+                         w['ethaddr'])+'\x01'), 'wif'))
 # Get wallet seed
 elif args[0] == 'getseed':
     pw = ask_for_password()
-    print getseed(w['encseed'], pw, w['ethaddr'])
+    print (getseed(w['encseed'], pw, w['ethaddr']))
 # Get wallet Ethereum privkey
 elif args[0] == 'getethprivkey':
     pw = ask_for_password()
-    print encode_privkey(sha3(getseed(w['encseed'], pw, w['ethaddr'])), 'hex')
+    print (encode_privkey(sha3(getseed(w['encseed'], pw, w['ethaddr'])), 'hex'))
 # Recover wallet seed
 elif args[0] == 'recover':
     if not w and not b:
-        print "Must have wallet or backup file"
+        print ("Must have wallet or backup file")
     elif not b:
         pw = ask_for_password()
-        print "Your seed is:", getseed(w['encseed'], pw, w['ethaddr'])
+        print ("Your seed is:", getseed(w['encseed'], pw, w['ethaddr']))
     elif not w:
         pw = ask_for_password()
-        print "Your seed is:", getseed(b['withpw'], pw, b['ethaddr'])
+        print ("Your seed is:", getseed(b['withpw'], pw, b['ethaddr']))
     else:
-        print "Your seed is:", getseed(b['withwallet'], w['bkp'], b['ethaddr'])
+        print ("Your seed is:", getseed(b['withwallet'], w['bkp'], b['ethaddr']))
 # Finalize a wallet
 elif args[0] == 'finalize':
     try:
@@ -269,23 +269,23 @@ elif args[0] == 'finalize':
     pw = ask_for_password()
     tx = finalize(w, u, pw)
     try:
-        print pushtx(tx)
+        print (pushtx(tx))
     except:
         try:
-            print eligius_pushtx(tx)
+            print (eligius_pushtx(tx))
         except:
             raise Exception("Blockchain.info and Eligius both down. Cannot send transaction. Remember that your funds stored in the intermediate address can always be recovered by running './pyethsaletool.py getbtcprivkey' and importing the output into a Bitcoin wallet like blockchain.info")
 # sha3 calculator
 elif args[0] == 'sha3':
-    print sha3(sys.argv[2]).encode('hex')
+    print (sha3(sys.argv[2]).encode('hex'))
 # Help
 else:
-    print 'Use "pyethsaletool genwallet" to generate a wallet'
-    print 'Use "pyethsaletool mkbackup" to make a backup of a wallet (using -w and -b)'
-    print 'Use "pyethsaletool getbtcaddress" to output the intermediate Bitcoin address you need to send funds to'
-    print 'Use "pyethsaletool getbtcprivkey" to output the private key to your intermediate Bitcoin address'
-    print 'Use "pyethsaletool getethaddress" to output the Ethereum address'
-    print 'Use "pyethsaletool getethprivkey" to output the Ethereum private key'
-    print 'Use "pyethsaletool finalize" to finalize the funding process once you have deposited to the intermediate address'
-    print 'Use "pyethsaletool recover" to recover the seed if you are missing either your wallet or your password'
-    print 'Use -s to specify a seed, -w to specify a wallet file, -b to specify a backup file and -p to specify a password when creating a wallet. The -w, -b and -p options also work with other commands.'
+    print ('Use "pyethsaletool genwallet" to generate a wallet')
+    print ('Use "pyethsaletool mkbackup" to make a backup of a wallet (using -w and -b)')
+    print ('Use "pyethsaletool getbtcaddress" to output the intermediate Bitcoin address you need to send funds to')
+    print ('Use "pyethsaletool getbtcprivkey" to output the private key to your intermediate Bitcoin address')
+    print ('Use "pyethsaletool getethaddress" to output the Ethereum address')
+    print ('Use "pyethsaletool getethprivkey" to output the Ethereum private key')
+    print ('Use "pyethsaletool finalize" to finalize the funding process once you have deposited to the intermediate address')
+    print ('Use "pyethsaletool recover" to recover the seed if you are missing either your wallet or your password')
+    print ('Use -s to specify a seed, -w to specify a wallet file, -b to specify a backup file and -p to specify a password when creating a wallet. The -w, -b and -p options also work with other commands.')
